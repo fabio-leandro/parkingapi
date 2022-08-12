@@ -1,36 +1,38 @@
-package com.fabio.parkingapi.entities;
+package com.fabio.parkingapi.dtos;
 
 import com.fabio.parkingapi.entities.enums.PeriodType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "tb_parkings")
-public class Parking {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class ParkingDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String license;
     private String model;
     private String color;
-    private LocalDateTime entrance = LocalDateTime.now();
-    private LocalDateTime exit = null;
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
+    private LocalDateTime entrance;
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
+    private LocalDateTime exit;
     private PeriodType periodType;
-    private Double bill = null;
+    private Double bill;
 
-    public Parking(Long id, String license, String model, String color, PeriodType periodType) {
+    public ParkingDto(){}
+
+    public ParkingDto(Long id, String license, String model, String color, LocalDateTime entrance, LocalDateTime exit,
+                      PeriodType periodType, Double bill) {
         this.id = id;
         this.license = license;
         this.model = model;
         this.color = color;
+        this.entrance = entrance;
+        this.exit = exit;
         this.periodType = periodType;
+        this.bill = bill;
     }
-
-    public Parking(){}
 
     public Long getId() {
         return id;

@@ -1,8 +1,8 @@
 package com.fabio.parkingapi.controllers;
 
 
-import com.fabio.parkingapi.ParkingService.ParkingService;
-import com.fabio.parkingapi.entities.Parking;
+import com.fabio.parkingapi.dtos.ParkingDto;
+import com.fabio.parkingapi.services.ParkingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +19,7 @@ public class ParkingController {
     private ParkingService parkingService;
 
     @GetMapping
-    public ResponseEntity<List<Parking>> findALl(){
+    public ResponseEntity<List<ParkingDto>> findALl(){
         return ResponseEntity.ok(parkingService.findAll());
     }
 }

@@ -3,7 +3,6 @@ package com.fabio.parkingapi;
 import com.fabio.parkingapi.entities.Parking;
 import com.fabio.parkingapi.entities.enums.PeriodType;
 import com.fabio.parkingapi.repositories.ParkingRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,8 +12,12 @@ import java.util.List;
 @SpringBootApplication
 public class ParkingapiApplication implements CommandLineRunner {
 
-	@Autowired
-	private ParkingRepository parkingRepository;
+
+	private final ParkingRepository parkingRepository;
+
+	public ParkingapiApplication(ParkingRepository parkingRepository) {
+		this.parkingRepository = parkingRepository;
+	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(ParkingapiApplication.class, args);
