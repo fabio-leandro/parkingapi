@@ -19,7 +19,6 @@ public class ParkingService {
         return parkingRepository.findAll().stream().map(this::toParkingDto).collect(Collectors.toList());
     }
 
-
     public Parking toParking(ParkingDto dto){
         return new Parking(dto.getId(), dto.getLicense(), dto.getModel(), dto.getColor(), dto.getPeriodType());
     }
