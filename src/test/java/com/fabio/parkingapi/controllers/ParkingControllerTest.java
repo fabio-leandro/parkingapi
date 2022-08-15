@@ -1,5 +1,6 @@
 package com.fabio.parkingapi.controllers;
 
+import com.fabio.parkingapi.dtos.NewParkingDto;
 import com.fabio.parkingapi.dtos.ParkingDto;
 import com.fabio.parkingapi.entities.enums.PeriodType;
 import com.fabio.parkingapi.services.ParkingService;
@@ -57,6 +58,23 @@ public class ParkingControllerTest {
                         .content(objectMapper.writeValueAsString(dtoList.get(0))))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].id", Matchers.is(dtoList.get(0).getId().intValue())));
+    }
+
+    @Test
+    @DisplayName("It must return status CREATED and a body with ParkingDto.")
+    void returnResponseStatusCreatedAndBodyOfParkingDto() throws Exception {
+        NewParkingDto newParkingDto = new NewParkingDto("WWW-9090","Ford Ka","Branco", PeriodType.FRACIONADO);
+        ParkingDto parkingDto = new ParkingDto(1L,"WWW-9090","Ford Ka","Branco",
+                LocalDateTime.now(),null, PeriodType.FRACIONADO,null);
+
+        Mockito.when(parkingService.saveParking(newParkingDto)).thenReturn(parkingDto);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/" + VERSION_APP + "/parkings")
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(newParkingDto)))
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.license", Matchers.is(parkingDto.getLicense())));
+
     }
 
 

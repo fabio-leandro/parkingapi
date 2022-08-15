@@ -1,5 +1,6 @@
 package com.fabio.parkingapi.services;
 
+import com.fabio.parkingapi.dtos.NewParkingDto;
 import com.fabio.parkingapi.dtos.ParkingDto;
 import com.fabio.parkingapi.entities.Parking;
 import com.fabio.parkingapi.entities.enums.PeriodType;
@@ -12,6 +13,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -35,20 +38,26 @@ public class ParkingServiceTest {
         Assertions.assertEquals(parkingDto.getId(), parking.getId());
         Assertions.assertEquals(parkingDto.getLicense(),parking.getLicense());
 
-
     }
 
     @Test
     @DisplayName("When called It must return a ParkingDto")
     void returnTheConversionParkingToParkingDto(){
         Parking parking = new Parking(1L,"WWW-9090","Ford Ka","Branco", PeriodType.FRACIONADO);
-
         ParkingDto parkingDto = parkingService.toParkingDto(parking);
-
         Assertions.assertEquals(parking.getId(),parkingDto.getId());
         Assertions.assertEquals(parking.getLicense(),parkingDto.getLicense());
         Assertions.assertEquals(parking.getColor(), parkingDto.getColor());
+    }
 
+    @Test
+    @DisplayName("When called It must return a Parking.")
+    void returnTheConversionNewParkingDtoToParking(){
+        NewParkingDto newParkingDto = new NewParkingDto("WWW-9090","Ford Ka","Branco", PeriodType.FRACIONADO);
+        Parking parking = parkingService.toParking(newParkingDto);
+        Assertions.assertEquals(newParkingDto.getLicense(),parking.getLicense());
+        Assertions.assertEquals(newParkingDto.getModel(), parking.getModel());
+        Assertions.assertEquals(newParkingDto.getPeriodType(),parking.getPeriodType());
     }
 
     @Test
@@ -56,11 +65,25 @@ public class ParkingServiceTest {
     void returnListParkingDto(){
         Parking carro1 = new Parking(1L,"WWW-9090","Ford Ka","Branco", PeriodType.FRACIONADO);
         List<Parking> parkingList = List.of(carro1);
-
         Mockito.when(parkingRepository.findAll()).thenReturn(parkingList);
-
         List<ParkingDto> dtoList = parkingService.findAll();
         Assertions.assertEquals(parkingList.get(0).getId(),dtoList.get(0).getId());
+    }
+
+    @Test
+    @MockitoSettings(strictness = Strictness.LENIENT)
+    @DisplayName("When called It must get a NewParkingDto. Save a Parking and return a ParkingDto")
+    void returnPrkingDto(){
+
+        NewParkingDto newParkingDto = new NewParkingDto("WQZ-3434","FIAT ARGO","RED",PeriodType.DIARIA);
+        Parking parking = new Parking(1L,"WQZ-3434","FIAT ARGO","RED",PeriodType.DIARIA);
+
+        Mockito.when(parkingRepository.save(parking)).thenReturn(parking);
+
+        ParkingDto parkingDtoSaved = parkingService.saveParking(newParkingDto);
+
+        Assertions.assertEquals(parking.getModel(),parkingDtoSaved.getModel());
+
     }
 
 

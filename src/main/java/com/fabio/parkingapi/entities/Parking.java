@@ -1,8 +1,6 @@
 package com.fabio.parkingapi.entities;
 
 import com.fabio.parkingapi.entities.enums.PeriodType;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonInclude;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
