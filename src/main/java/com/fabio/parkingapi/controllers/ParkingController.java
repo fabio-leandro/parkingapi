@@ -27,7 +27,8 @@ public class ParkingController {
 
     @PostMapping
     public ResponseEntity<ParkingDto> saveParking(@Valid @RequestBody NewParkingDto newParkingDto){
-        return ResponseEntity.status(HttpStatus.CREATED).body(parkingService.saveParking(newParkingDto));
+        ParkingDto parkingDto = parkingService.saveParking(newParkingDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(parkingDto);
     }
 
 

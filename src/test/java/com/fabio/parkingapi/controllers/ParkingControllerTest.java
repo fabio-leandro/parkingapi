@@ -6,15 +6,18 @@ import com.fabio.parkingapi.entities.enums.PeriodType;
 import com.fabio.parkingapi.services.ParkingService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -35,7 +38,7 @@ public class ParkingControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
+    @Mock
     private ParkingService parkingService;
 
     @InjectMocks
@@ -44,13 +47,20 @@ public class ParkingControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    private ParkingDto parkingDto;
+    private NewParkingDto newParkingDto;
+
+    @BeforeEach
+    void setup(){
+      parkingDto = new ParkingDto(1L,"WWW-9090","Ford Ka","Branco",
+                LocalDateTime.now(),null, PeriodType.FRACIONADO,null);
+      newParkingDto = new NewParkingDto("WWW-9090","Ford Ka","Branco", PeriodType.FRACIONADO);
+    }
+
     @Test
     @DisplayName("It must return status OK and a List of ParkingDto")
     void returnResponseListOfParkingDto() throws Exception {
-        ParkingDto parkingDto = new ParkingDto(1L,"WWW-9090","Ford Ka","Branco",
-                LocalDateTime.now(),null, PeriodType.FRACIONADO,null);
-        List<ParkingDto> dtoList = List.of(parkingDto);
-
+        List<ParkingDto> dtoList = List.of(this.parkingDto);
         Mockito.when(parkingService.findAll()).thenReturn(dtoList);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/" + VERSION_APP + "/parkings")
@@ -63,17 +73,16 @@ public class ParkingControllerTest {
     @Test
     @DisplayName("It must return status CREATED and a body with ParkingDto.")
     void returnResponseStatusCreatedAndBodyOfParkingDto() throws Exception {
-        NewParkingDto newParkingDto = new NewParkingDto("WWW-9090","Ford Ka","Branco", PeriodType.FRACIONADO);
-        ParkingDto parkingDto = new ParkingDto(1L,"WWW-9090","Ford Ka","Branco",
-                LocalDateTime.now(),null, PeriodType.FRACIONADO,null);
-
         Mockito.when(parkingService.saveParking(newParkingDto)).thenReturn(parkingDto);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/" + VERSION_APP + "/parkings")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(newParkingDto)))
-                .andExpect(MockMvcResultMatchers.status().isCreated())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.license", Matchers.is(parkingDto.getLicense())));
+                .andExpect(MockMvcResultMatchers.status().isCreated());
+
+        var response = parkingController.saveParking(newParkingDto);
+        Assertions.assertEquals(response.getStatusCode().value(), HttpStatus.CREATED.value());
+        Assertions.assertEquals(parkingDto,response.getBody());
 
     }
 
