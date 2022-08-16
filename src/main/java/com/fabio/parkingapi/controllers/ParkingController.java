@@ -3,6 +3,7 @@ package com.fabio.parkingapi.controllers;
 
 import com.fabio.parkingapi.dtos.NewParkingDto;
 import com.fabio.parkingapi.dtos.ParkingDto;
+import com.fabio.parkingapi.dtos.UpdateParkingDto;
 import com.fabio.parkingapi.entities.Parking;
 import com.fabio.parkingapi.services.ParkingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,12 @@ public class ParkingController {
     public ResponseEntity<ParkingDto> findById(@PathVariable Long id){
         ParkingDto parkingDto = parkingService.findById(id);
         return ResponseEntity.ok(parkingDto);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ParkingDto> updateById(@PathVariable Long id, @Valid @RequestBody UpdateParkingDto updateParkingDto){
+        ParkingDto dto = parkingService.updateById(id,updateParkingDto);
+        return ResponseEntity.ok(dto);
     }
 
 

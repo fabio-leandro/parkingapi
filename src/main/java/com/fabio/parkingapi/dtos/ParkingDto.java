@@ -13,9 +13,9 @@ public class ParkingDto {
     private String license;
     private String model;
     private String color;
-    @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime entrance;
-    @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime exit;
     private PeriodType periodType;
     private Double bill;

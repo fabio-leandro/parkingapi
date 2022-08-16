@@ -2,6 +2,7 @@ package com.fabio.parkingapi.services;
 
 import com.fabio.parkingapi.dtos.NewParkingDto;
 import com.fabio.parkingapi.dtos.ParkingDto;
+import com.fabio.parkingapi.dtos.UpdateParkingDto;
 import com.fabio.parkingapi.entities.Parking;
 import com.fabio.parkingapi.entities.enums.PeriodType;
 import com.fabio.parkingapi.exceptions.ObjectNotFoundException;
@@ -34,6 +35,8 @@ public class ParkingServiceTest {
     private ParkingDto parkingDto;
     private Parking parking;
     private NewParkingDto newParkingDto;
+    private Long fakeId;
+    private UpdateParkingDto updateParkingDto;
 
     @BeforeEach
     void setup(){
@@ -41,6 +44,8 @@ public class ParkingServiceTest {
                 LocalDateTime.now(),null, PeriodType.FRACIONADO,null);
         parking = new Parking(1L,"WWW-9090","Ford Ka","Branco", PeriodType.FRACIONADO);
         newParkingDto = new NewParkingDto("WWW-9090","Ford Ka","Branco", PeriodType.FRACIONADO);
+        updateParkingDto = new UpdateParkingDto(1L,"WWW-9090","Ford Ka","Branco", PeriodType.FRACIONADO);
+        fakeId = 1L;
     }
 
     @Test
@@ -71,6 +76,15 @@ public class ParkingServiceTest {
     }
 
     @Test
+    @DisplayName("When called It must return a Parking.")
+    void returnTheConversionUpdateParkingDtoToParking(){
+        Parking parking = parkingService.toParking(updateParkingDto);
+        Assertions.assertEquals(updateParkingDto.getLicense(),parking.getLicense());
+        Assertions.assertEquals(updateParkingDto.getModel(), parking.getModel());
+        Assertions.assertEquals(updateParkingDto.getPeriodType(),parking.getPeriodType());
+    }
+
+    @Test
     @DisplayName("When called It must return a list of PrkingDto.")
     void returnListParkingDto(){
         List<Parking> parkingList = List.of(parking);
@@ -91,14 +105,33 @@ public class ParkingServiceTest {
     @Test
     @DisplayName("When called It must get a ID and return a ParkingDto.")
     void returnParkingDtoById(){
-        Long fakeId = 1L;
         Mockito.when(parkingRepository.findById(fakeId)).thenReturn(Optional.ofNullable(parking));
         ParkingDto dto = parkingService.findById(fakeId);
         Assertions.assertEquals(dto.getId(), parking.getId());
         Assertions.assertEquals(dto.getLicense(),parking.getLicense());
         Assertions.assertThrows(ObjectNotFoundException.class,()->parkingService.findById(11L));
-
     }
 
+    @Test
+    @MockitoSettings(strictness = Strictness.LENIENT)
+    @DisplayName("When called It must get a ID, UpdateParkingDto and Return ParkingDto.")
+    void shouldUpdateParkingAndReturnParkingDto(){
+        Mockito.when(parkingRepository.findById(fakeId)).thenReturn(Optional.ofNullable(parking));
+        Mockito.when(parkingRepository.save(parking)).thenReturn(parking);
+        ParkingDto dto = parkingService.updateById(fakeId,updateParkingDto);
+        Assertions.assertEquals(parking.getId(),dto.getId());
+        Assertions.assertEquals(parking.getLicense(),dto.getLicense());
+        Assertions.assertThrows(ObjectNotFoundException.class,()->parkingService.updateById(11L,updateParkingDto));
+    }
 
 }
+
+
+
+
+
+
+
+
+
+

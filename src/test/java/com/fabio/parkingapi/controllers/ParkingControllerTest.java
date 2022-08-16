@@ -2,8 +2,10 @@ package com.fabio.parkingapi.controllers;
 
 import com.fabio.parkingapi.dtos.NewParkingDto;
 import com.fabio.parkingapi.dtos.ParkingDto;
+import com.fabio.parkingapi.dtos.UpdateParkingDto;
 import com.fabio.parkingapi.entities.enums.PeriodType;
 import com.fabio.parkingapi.services.ParkingService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
@@ -50,12 +52,16 @@ public class ParkingControllerTest {
 
     private ParkingDto parkingDto;
     private NewParkingDto newParkingDto;
+    private UpdateParkingDto updateParkingDto;
+    private Long fakeId;
 
     @BeforeEach
     void setup(){
       parkingDto = new ParkingDto(1L,"WWW-9090","Ford Ka","Branco",
                 LocalDateTime.now(),null, PeriodType.FRACIONADO,null);
       newParkingDto = new NewParkingDto("WWW-9090","Ford Ka","Branco", PeriodType.FRACIONADO);
+      updateParkingDto = new UpdateParkingDto(1L,"WWW-9090","Ford Ka","Branco", PeriodType.FRACIONADO);
+        fakeId = 1L;
     }
 
     @Test
@@ -75,32 +81,46 @@ public class ParkingControllerTest {
     @DisplayName("It must return status CREATED and a body with ParkingDto.")
     void returnResponseStatusCreatedAndBodyOfParkingDto() throws Exception {
         Mockito.when(parkingService.saveParking(newParkingDto)).thenReturn(parkingDto);
-
         mockMvc.perform(MockMvcRequestBuilders.post("/api/" + VERSION_APP + "/parkings")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(newParkingDto)))
                 .andExpect(MockMvcResultMatchers.status().isCreated());
-
         var response = parkingController.saveParking(newParkingDto);
         Assertions.assertEquals(response.getStatusCode().value(), HttpStatus.CREATED.value());
         Assertions.assertEquals(parkingDto,response.getBody());
-
     }
 
     @Test
     @DisplayName("It must return status OK and a body with ParkingDto")
     void returnResponseStatusOkAndBodyOfParkingDto() throws Exception {
-        Long fakeId = 1L;
         Mockito.when(parkingService.findById(fakeId)).thenReturn(parkingDto);
-
         mockMvc.perform(MockMvcRequestBuilders.get("/api/" + VERSION_APP + "/parkings/"+fakeId)
                         .contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
-
         var response = parkingController.findById(fakeId);
         Assertions.assertEquals(ResponseEntity.ok().body(parkingDto),response);
+    }
+
+    @Test
+    @DisplayName("When called It must update a Parking and return status ok with body of ParkingDto")
+    void shouldReturnResponseStatusOkAndResponseBodyOfParkingDto() throws Exception {
+        Mockito.when(parkingService.updateById(fakeId,updateParkingDto)).thenReturn(parkingDto);
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/" + VERSION_APP + "/parkings/"+fakeId)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(parkingDto)))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+        var response = parkingController.updateById(fakeId,updateParkingDto);
+        Assertions.assertEquals(ResponseEntity.ok(parkingDto),response);
 
     }
+
+
+
+
+
+
+
+
 
 
 }
