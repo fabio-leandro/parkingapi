@@ -23,6 +23,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import static org.mockito.Mockito.times;
+
 @ExtendWith(MockitoExtension.class)
 public class ParkingServiceTest {
 
@@ -122,6 +124,20 @@ public class ParkingServiceTest {
         Assertions.assertEquals(parking.getId(),dto.getId());
         Assertions.assertEquals(parking.getLicense(),dto.getLicense());
         Assertions.assertThrows(ObjectNotFoundException.class,()->parkingService.updateById(11L,updateParkingDto));
+    }
+
+    @Test
+    @DisplayName("When called It must delete a Parking.")
+    void shouldDeleteAParking(){
+        Mockito.when(parkingRepository.findById(fakeId)).thenReturn(Optional.ofNullable(parking));
+        Mockito.doNothing().when(parkingRepository).deleteById(fakeId);
+
+        parkingService.deleteById(fakeId);
+
+        Mockito.verify(parkingRepository, times(1)).findById(fakeId);
+        Mockito.verify(parkingRepository,times(1)).deleteById(fakeId);
+        Assertions.assertThrows(ObjectNotFoundException.class,()->parkingService.findById(11L));
+
     }
 
 }

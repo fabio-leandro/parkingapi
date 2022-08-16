@@ -40,6 +40,11 @@ public class ParkingService {
         return toParkingDto(parking);
     }
 
+    public void deleteById(Long id){
+        findById(id);
+        parkingRepository.deleteById(id);
+    }
+
 
 
     public Parking toParking(ParkingDto dto){

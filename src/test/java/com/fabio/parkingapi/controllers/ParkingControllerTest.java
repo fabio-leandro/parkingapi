@@ -5,7 +5,6 @@ import com.fabio.parkingapi.dtos.ParkingDto;
 import com.fabio.parkingapi.dtos.UpdateParkingDto;
 import com.fabio.parkingapi.entities.enums.PeriodType;
 import com.fabio.parkingapi.services.ParkingService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
@@ -114,13 +113,18 @@ public class ParkingControllerTest {
 
     }
 
+    @Test
+    @DisplayName("When called It must delete Parking and return status NoContent.")
+    void shouldDeleteParking() throws Exception {
+        Mockito.doNothing().when(parkingService).deleteById(fakeId);
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/" + VERSION_APP + "/parkings/"+fakeId)
+                        .contentType("application/json"))
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
 
+        var response = parkingController.deleteById(fakeId);
+        Assertions.assertEquals(ResponseEntity.noContent().build(),response);
 
-
-
-
-
-
+    }
 
 
 }

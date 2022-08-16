@@ -44,7 +44,10 @@ public class ParkingController {
         return ResponseEntity.ok(dto);
     }
 
-
-
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable Long id){
+        parkingService.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
 
 }
