@@ -42,8 +42,6 @@ public class NewParkingDto {
         this.color = color;
     }
 
-
-
     public PeriodType getPeriodType() {
         return periodType;
     }

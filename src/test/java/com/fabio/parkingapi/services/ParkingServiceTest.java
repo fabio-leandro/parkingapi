@@ -4,6 +4,7 @@ import com.fabio.parkingapi.dtos.NewParkingDto;
 import com.fabio.parkingapi.dtos.ParkingDto;
 import com.fabio.parkingapi.entities.Parking;
 import com.fabio.parkingapi.entities.enums.PeriodType;
+import com.fabio.parkingapi.exceptions.ObjectNotFoundException;
 import com.fabio.parkingapi.repositories.ParkingRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,6 +20,7 @@ import org.mockito.quality.Strictness;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
 public class ParkingServiceTest {
@@ -84,6 +86,18 @@ public class ParkingServiceTest {
         Mockito.when(parkingRepository.save(parking)).thenReturn(parking);
         ParkingDto parkingDtoSaved = parkingService.saveParking(newParkingDto);
         Assertions.assertEquals(parking.getModel(),parkingDtoSaved.getModel());
+    }
+
+    @Test
+    @DisplayName("When called It must get a ID and return a ParkingDto.")
+    void returnParkingDtoById(){
+        Long fakeId = 1L;
+        Mockito.when(parkingRepository.findById(fakeId)).thenReturn(Optional.ofNullable(parking));
+        ParkingDto dto = parkingService.findById(fakeId);
+        Assertions.assertEquals(dto.getId(), parking.getId());
+        Assertions.assertEquals(dto.getLicense(),parking.getLicense());
+        Assertions.assertThrows(ObjectNotFoundException.class,()->parkingService.findById(11L));
+
     }
 
 

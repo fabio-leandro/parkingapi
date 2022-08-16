@@ -31,5 +31,13 @@ public class ParkingController {
         return ResponseEntity.status(HttpStatus.CREATED).body(parkingDto);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ParkingDto> findById(@PathVariable Long id){
+        ParkingDto parkingDto = parkingService.findById(id);
+        return ResponseEntity.ok(parkingDto);
+    }
+
+
+
 
 }

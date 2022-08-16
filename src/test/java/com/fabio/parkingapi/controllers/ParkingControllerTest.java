@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -83,6 +84,21 @@ public class ParkingControllerTest {
         var response = parkingController.saveParking(newParkingDto);
         Assertions.assertEquals(response.getStatusCode().value(), HttpStatus.CREATED.value());
         Assertions.assertEquals(parkingDto,response.getBody());
+
+    }
+
+    @Test
+    @DisplayName("It must return status OK and a body with ParkingDto")
+    void returnResponseStatusOkAndBodyOfParkingDto() throws Exception {
+        Long fakeId = 1L;
+        Mockito.when(parkingService.findById(fakeId)).thenReturn(parkingDto);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/" + VERSION_APP + "/parkings/"+fakeId)
+                        .contentType("application/json"))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+        var response = parkingController.findById(fakeId);
+        Assertions.assertEquals(ResponseEntity.ok().body(parkingDto),response);
 
     }
 
