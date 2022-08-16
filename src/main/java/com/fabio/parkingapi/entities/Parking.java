@@ -3,11 +3,14 @@ package com.fabio.parkingapi.entities;
 import com.fabio.parkingapi.entities.enums.PeriodType;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "tb_parkings")
-public class Parking {
+public class Parking implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

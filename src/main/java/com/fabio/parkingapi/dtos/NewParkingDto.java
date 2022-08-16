@@ -2,7 +2,11 @@ package com.fabio.parkingapi.dtos;
 
 import com.fabio.parkingapi.entities.enums.PeriodType;
 
-public class NewParkingDto {
+import java.io.Serializable;
+
+public class NewParkingDto implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private String license;
     private String model;

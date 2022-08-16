@@ -4,10 +4,13 @@ import com.fabio.parkingapi.entities.enums.PeriodType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ParkingDto {
+public class ParkingDto implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private Long id;
     private String license;
