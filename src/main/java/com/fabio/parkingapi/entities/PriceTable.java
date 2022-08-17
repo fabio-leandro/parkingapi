@@ -3,6 +3,7 @@ package com.fabio.parkingapi.entities;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Table(name = "tb_prices")
@@ -19,11 +20,10 @@ public class PriceTable implements Serializable {
 
     public PriceTable(){}
 
-    public PriceTable(Long id, String description, Double price, LocalDateTime creation) {
+    public PriceTable(Long id, String description, Double price) {
         this.id = id;
         this.description = description;
         this.price = price;
-        this.creation = creation;
     }
 
     public Long getId() {
@@ -56,5 +56,18 @@ public class PriceTable implements Serializable {
 
     public void setCreation(LocalDateTime creation) {
         this.creation = creation;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PriceTable that = (PriceTable) o;
+        return Objects.equals(id, that.id) && Objects.equals(description, that.description) && Objects.equals(price, that.price) && Objects.equals(creation, that.creation);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, description, price, creation);
     }
 }

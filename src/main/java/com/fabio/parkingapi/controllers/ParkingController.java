@@ -4,7 +4,6 @@ package com.fabio.parkingapi.controllers;
 import com.fabio.parkingapi.dtos.NewParkingDto;
 import com.fabio.parkingapi.dtos.ParkingDto;
 import com.fabio.parkingapi.dtos.UpdateParkingDto;
-import com.fabio.parkingapi.entities.Parking;
 import com.fabio.parkingapi.services.ParkingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
