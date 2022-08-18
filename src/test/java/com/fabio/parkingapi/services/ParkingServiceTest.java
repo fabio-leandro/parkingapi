@@ -36,6 +36,8 @@ public class ParkingServiceTest {
 
     private ParkingDto parkingDto;
     private Parking parking;
+    private Parking parkingDiaria;
+    private Parking parkingMensal;
     private NewParkingDto newParkingDto;
     private Long fakeId;
     private UpdateParkingDto updateParkingDto;
@@ -45,6 +47,8 @@ public class ParkingServiceTest {
         parkingDto = new ParkingDto(1L,"WWW-9090","Ford Ka","Branco",
                 LocalDateTime.now(),null, PeriodType.FRACIONADO,null);
         parking = new Parking(1L,"WWW-9090","Ford Ka","Branco", PeriodType.FRACIONADO);
+        parkingDiaria = new Parking(1L,"WWW-9090","Ford Ka","Branco", PeriodType.DIARIA);
+        parkingMensal = new Parking(1L,"WWW-9090","Ford Ka","Branco", PeriodType.MENSAL);
         newParkingDto = new NewParkingDto("WWW-9090","Ford Ka","Branco", PeriodType.FRACIONADO);
         updateParkingDto = new UpdateParkingDto(1L,"WWW-9090","Ford Ka","Branco", PeriodType.FRACIONADO);
         fakeId = 1L;
@@ -139,6 +143,85 @@ public class ParkingServiceTest {
         Assertions.assertThrows(ObjectNotFoundException.class,()->parkingService.findById(11L));
 
     }
+
+    @Test
+    @DisplayName("It must return a time in minutes that the car stayed parked.")
+    void shouldReturnMinutesParked(){
+        Parking p = new Parking(1L,"WWW-9090","Ford Ka","Branco", PeriodType.FRACIONADO);
+        LocalDateTime saida = LocalDateTime.now();
+        p.setExit(saida);
+        int minutosEsperado = (p.getExit().getHour() * 60 + p.getExit().getMinute()) - (p.getEntrance().getHour() * 60 + p.getEntrance().getMinute());
+
+        Mockito.when(parkingRepository.findById(p.getId())).thenReturn(Optional.of(parking));
+        Integer minutos = parkingService.getFraction(p.getId());
+
+        Assertions.assertEquals(minutosEsperado,minutos);
+        Assertions.assertThrows(ObjectNotFoundException.class,()->parkingService.getFraction(11L));
+
+    }
+
+    @Test
+    @DisplayName("If PeriodType is Fracionado and bigger 60 minutes then It must return a ParkingDto with bill and adicional.")
+    void shouldReturnParkingDtoWithBillFraction() {
+        double price = 7.00;
+        double adicional = 5.00;
+        Parking p = new Parking(1L, "WWW-9090", "Ford Ka", "Branco", PeriodType.FRACIONADO);
+        p.setExit(LocalDateTime.now().plusMinutes(61));
+        p.setBill(12d);
+        parking.setExit(LocalDateTime.now().plusMinutes(61));
+        Mockito.when(parkingRepository.findById(fakeId)).thenReturn(Optional.of(parking));
+        ParkingDto dto = parkingService.generateBill(price,fakeId,adicional);
+        Assertions.assertEquals(p.getBill(),dto.getBill());
+        Assertions.assertThrows(ObjectNotFoundException.class,()->parkingService.generateBill(price,11L,adicional));
+    }
+
+    @Test
+    @DisplayName("If PeriodType is Fracionado and bigger 60 minutes then It must return a ParkingDto with bill with adicional.")
+    void shouldReturnParkingDtoWithBillFractionWithoutAdicional() {
+        double price = 9.00;
+        double adicional = 5.00;
+        Parking p = new Parking(1L, "WWW-9090", "Ford Ka", "Branco", PeriodType.FRACIONADO);
+        p.setExit(LocalDateTime.now().plusMinutes(31));
+        p.setBill(9d);
+        parking.setExit(LocalDateTime.now().plusMinutes(31));
+        Mockito.when(parkingRepository.findById(fakeId)).thenReturn(Optional.of(parking));
+        ParkingDto dto = parkingService.generateBill(price,fakeId,adicional);
+        Assertions.assertEquals(p.getBill(),dto.getBill());
+
+    }
+
+    @Test
+    @DisplayName("If PeriodType is Diaria It must return a ParkingDto with bill.")
+    void shouldReturnParkingDtoWithBill() {
+        double price = 30.00;
+        double adicional = 5.00;
+        Parking p = new Parking(1L, "WWW-9090", "Ford Ka", "Branco", PeriodType.DIARIA);
+        p.setExit(LocalDateTime.now());
+        p.setBill(30d);
+        parkingDiaria.setExit(LocalDateTime.now());
+        Mockito.when(parkingRepository.findById(fakeId)).thenReturn(Optional.of(parkingDiaria));
+        ParkingDto dto = parkingService.generateBill(price,fakeId,adicional);
+        Assertions.assertEquals(p.getBill(),dto.getBill());
+
+    }
+
+    @Test
+    @DisplayName("If PeriodType is Mensal It must return a ParkingDto with bill.")
+    void shouldReturnParkingDtoWithBillMensal() {
+        double price = 200.00;
+        double adicional = 5.00;
+        Parking p = new Parking(1L, "WWW-9090", "Ford Ka", "Branco", PeriodType.MENSAL);
+        p.setExit(LocalDateTime.now());
+        p.setBill(200d);
+        parkingMensal.setExit(LocalDateTime.now());
+        Mockito.when(parkingRepository.findById(fakeId)).thenReturn(Optional.of(parkingMensal));
+        ParkingDto dto = parkingService.generateBill(price,fakeId,adicional);
+        Assertions.assertEquals(p.getBill(),dto.getBill());
+
+    }
+
+
+
 
 }
 

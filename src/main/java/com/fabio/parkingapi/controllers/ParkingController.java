@@ -49,4 +49,16 @@ public class ParkingController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/parkedTime/{id}")
+    public ResponseEntity<Integer> getFraction(@PathVariable Long id){
+        return ResponseEntity.ok(parkingService.getFraction(id));
+    }
+
+    @PutMapping("/generateBill/{id}")
+    public ResponseEntity<ParkingDto> generateBill(@RequestParam(value = "price") Double price,
+                                              @RequestParam(value = "adicional") Double adicional,
+                                              @PathVariable Long id){
+        return ResponseEntity.ok(parkingService.generateBill(price,id,adicional));
+    }
+
 }

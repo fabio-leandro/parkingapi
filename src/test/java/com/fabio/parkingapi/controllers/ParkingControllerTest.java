@@ -126,5 +126,26 @@ public class ParkingControllerTest {
 
     }
 
+    @Test
+    @DisplayName("It must return status OK and body with time parked in minutes.")
+    void shouldReturnTimeParked() throws Exception {
+        Mockito.when(parkingService.getFraction(fakeId)).thenReturn(100);
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/" + VERSION_APP + "/parkings/parkedTime/"+fakeId)
+                        .contentType("application/json"))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+        var response = parkingController.getFraction(fakeId);
+        Assertions.assertEquals(ResponseEntity.ok(100),response);
+    }
+
+    @Test
+    @DisplayName("It must return status ok and body with bill generated of Parking.")
+    void shouldReturnParkingDtoAndGenerateBill() throws Exception {
+        parkingDto.setExit(LocalDateTime.now());
+        parkingDto.setBill(12.00);
+        Mockito.when(parkingService.generateBill(12d,1L,5d)).thenReturn(parkingDto);
+        var response = parkingController.generateBill(12d,5.00,fakeId);
+        Assertions.assertEquals(ResponseEntity.ok(parkingDto),response);
+    }
+
 
 }

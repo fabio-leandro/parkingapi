@@ -18,6 +18,7 @@ public class ParkingapiApplication implements CommandLineRunner {
 	private final ParkingRepository parkingRepository;
 	private final PriceTableRepository priceTableRepository;
 
+
 	public ParkingapiApplication(ParkingRepository parkingRepository, PriceTableRepository priceTableRepository) {
 		this.parkingRepository = parkingRepository;
 		this.priceTableRepository = priceTableRepository;
@@ -44,7 +45,6 @@ public class ParkingapiApplication implements CommandLineRunner {
 		PriceTable p7 = new PriceTable(7L,"Mensal",200.00);
 
 		priceTableRepository.saveAll(List.of(p1,p2,p3,p4,p5,p6,p7));
-
 
 	}
 }
