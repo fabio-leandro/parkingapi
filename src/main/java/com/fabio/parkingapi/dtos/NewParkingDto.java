@@ -1,21 +1,29 @@
 package com.fabio.parkingapi.dtos;
 
-import com.fabio.parkingapi.entities.enums.PeriodType;
-
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 public class NewParkingDto implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @NotNull(message = "The License cannot be null.")
+    @Size(min = 7, max = 7, message = "The License informed is invalid.")
     private String license;
+    @NotNull(message = "The Model cannot be null.")
+    @Size(min = 2, max = 50, message = "The model informed is invalid.")
     private String model;
+    @NotNull(message = "The Color cannot be null.")
+    @Size(min = 2, max = 30, message = "The Color informed is invalid.")
     private String color;
-    private PeriodType periodType;
+    @NotNull(message = "The Period Type cannot be null.")
+    private com.fabio.parkingapi.entities.enums.PeriodType periodType;
+
 
     public NewParkingDto(){}
 
-    public NewParkingDto(String license, String model, String color,PeriodType periodType) {
+    public NewParkingDto(String license, String model, String color, com.fabio.parkingapi.entities.enums.PeriodType periodType) {
         this.license = license;
         this.model = model;
         this.color = color;
@@ -46,11 +54,11 @@ public class NewParkingDto implements Serializable {
         this.color = color;
     }
 
-    public PeriodType getPeriodType() {
+    public com.fabio.parkingapi.entities.enums.PeriodType getPeriodType() {
         return periodType;
     }
 
-    public void setPeriodType(PeriodType periodType) {
+    public void setPeriodType(com.fabio.parkingapi.entities.enums.PeriodType periodType) {
         this.periodType = periodType;
     }
 }

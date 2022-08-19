@@ -1,13 +1,19 @@
 package com.fabio.parkingapi.dtos;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 public class UpdatePriceTableDto implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @NotNull(message = "The ID cannot be null.")
     private Long id;
+    @NotNull(message = "The Description cannot be null.")
+    @Size(min = 2, max = 50, message = "The Description informed is invalid.")
     private String description;
+    @NotNull(message = "Thre Price cannot be null.")
     private Double price;
 
     public UpdatePriceTableDto(){}

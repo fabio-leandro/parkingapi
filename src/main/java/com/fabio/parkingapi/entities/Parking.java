@@ -15,11 +15,16 @@ public class Parking implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(unique = true, nullable = false, length = 8)
     private String license;
+    @Column(nullable = false, length = 50)
     private String model;
+    @Column(nullable = false, length = 30)
     private String color;
     private LocalDateTime entrance = LocalDateTime.now();
+    @Column(length = 30)
     private LocalDateTime exit = null;
+    @Column(nullable = false, length = 20)
     private PeriodType periodType;
     private Double bill = null;
 
