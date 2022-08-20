@@ -54,7 +54,6 @@ public class PriceTableServiceTest {
         PriceTableDto dto = priceTableService.toPriceTableDto(priceTable);
         Assertions.assertEquals(priceTableDto.getDescription(),dto.getDescription());
         Assertions.assertEquals(priceTableDto.getPrice(),dto.getPrice());
-        Assertions.assertEquals(priceTableDto.getCreation(),dto.getCreation());
     }
 
     @Test

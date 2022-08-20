@@ -31,7 +31,7 @@ public class ParkingController {
 
     @PostMapping
     @ApiOperation(value = "Create a parking and return ParkingDto.")
-    public ResponseEntity<ParkingDto> saveParking(@Valid @RequestBody NewParkingDto newParkingDto){
+    public ResponseEntity<ParkingDto> saveParking(@RequestBody @Valid NewParkingDto newParkingDto){
         ParkingDto parkingDto = parkingService.saveParking(newParkingDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(parkingDto);
     }
