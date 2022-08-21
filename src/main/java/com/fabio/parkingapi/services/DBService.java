@@ -2,9 +2,13 @@ package com.fabio.parkingapi.services;
 
 import com.fabio.parkingapi.entities.Parking;
 import com.fabio.parkingapi.entities.PriceTable;
+import com.fabio.parkingapi.entities.UserModel;
 import com.fabio.parkingapi.entities.enums.PeriodType;
 import com.fabio.parkingapi.repositories.ParkingRepository;
 import com.fabio.parkingapi.repositories.PriceTableRepository;
+import com.fabio.parkingapi.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,13 +16,18 @@ import java.util.List;
 @Service
 public class DBService {
 
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
     private final ParkingRepository parkingRepository;
     private final PriceTableRepository priceTableRepository;
+    private final UserRepository userRepository;
 
 
-    public DBService(ParkingRepository parkingRepository, PriceTableRepository priceTableRepository) {
+    public DBService(ParkingRepository parkingRepository, PriceTableRepository priceTableRepository, UserRepository userRepository) {
         this.parkingRepository = parkingRepository;
         this.priceTableRepository = priceTableRepository;
+        this.userRepository = userRepository;
     }
 
     public void instantiateDataBases(){
@@ -38,6 +47,11 @@ public class DBService {
         PriceTable p7 = new PriceTable(7L,"Mensal",200.00);
 
         priceTableRepository.saveAll(List.of(p1,p2,p3,p4,p5,p6,p7));
+
+        UserModel userModel = new UserModel(1L,"Fabio","fabio@gmail.com",passwordEncoder.encode("1234"));
+        UserModel userModelAdm = new UserModel(2L, "Leandro","leandro@gmail.com",passwordEncoder.encode("5678"));
+
+        userRepository.saveAll(List.of(userModel,userModelAdm));
 
     }
 
