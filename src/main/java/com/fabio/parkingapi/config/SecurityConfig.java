@@ -5,7 +5,6 @@ import com.fabio.parkingapi.security.JWTAuthorizationFilter;
 import com.fabio.parkingapi.security.JWTUtil;
 import com.fabio.parkingapi.security.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -35,12 +34,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private JWTUtil jwtUtil;
 
+    private static String version = "${api.version}";
+
     private static final String[] PUBLIC_MATCHERS = {
             "/h2-console/**",
     };
-
-    @Value("${api.version}")
-    private String version;
 
     private static final String[] PUBLIC_MATCHERS_SWAGGER ={
             "/swagger-ui/**",
@@ -53,6 +51,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/*.css",
             "/*.ico",
             "/*.png"
+    };
+
+    private static String[] PUBLIC_MATCHERS_POST ={
+            "/api/"+version+"/auth"
     };
 
     @Override
