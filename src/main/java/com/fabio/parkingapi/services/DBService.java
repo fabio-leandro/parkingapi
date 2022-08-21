@@ -3,6 +3,7 @@ package com.fabio.parkingapi.services;
 import com.fabio.parkingapi.entities.Parking;
 import com.fabio.parkingapi.entities.PriceTable;
 import com.fabio.parkingapi.entities.UserModel;
+import com.fabio.parkingapi.entities.enums.Perfil;
 import com.fabio.parkingapi.entities.enums.PeriodType;
 import com.fabio.parkingapi.repositories.ParkingRepository;
 import com.fabio.parkingapi.repositories.PriceTableRepository;
@@ -50,6 +51,7 @@ public class DBService {
 
         UserModel userModel = new UserModel(1L,"Fabio","fabio@gmail.com",passwordEncoder.encode("1234"));
         UserModel userModelAdm = new UserModel(2L, "Leandro","leandro@gmail.com",passwordEncoder.encode("5678"));
+        userModelAdm.addPerfil(Perfil.ADMIN);
 
         userRepository.saveAll(List.of(userModel,userModelAdm));
 

@@ -50,6 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(PUBLIC_MATCHERS).permitAll()
                 .antMatchers(PUBLIC_MATCHERS_SWAGGER).permitAll()
                 .antMatchers(HttpMethod.GET,"/api/"+version+"/parkings").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/"+version+"/users").permitAll()
                 .anyRequest().authenticated();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }

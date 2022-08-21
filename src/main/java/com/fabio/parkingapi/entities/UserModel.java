@@ -1,9 +1,14 @@
 package com.fabio.parkingapi.entities;
 
+import com.fabio.parkingapi.entities.enums.Perfil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "tb_users")
@@ -19,13 +24,20 @@ public class UserModel implements Serializable {
     @JsonIgnore
     private String password;
 
-    public UserModel() {}
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "PERFIS")
+    private Set<Integer> perfis = new HashSet<>();
+
+    public UserModel() {
+        addPerfil(Perfil.USER);
+    }
 
     public UserModel(Long id, String name, String email, String password) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
+        addPerfil(Perfil.USER);
     }
 
     public Long getId() {
@@ -58,5 +70,26 @@ public class UserModel implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Set<Perfil> getPerfis(){
+        return perfis.stream().map(Perfil::toEnum).collect(Collectors.toSet());
+    }
+
+    public void addPerfil(Perfil perfil){
+        perfis.add(perfil.getCod());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserModel userModel = (UserModel) o;
+        return Objects.equals(id, userModel.id) && Objects.equals(name, userModel.name) && Objects.equals(email, userModel.email) && Objects.equals(password, userModel.password) && Objects.equals(perfis, userModel.perfis);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, email, password, perfis);
     }
 }
