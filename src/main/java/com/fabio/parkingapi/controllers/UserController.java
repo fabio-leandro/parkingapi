@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -39,12 +40,14 @@ public class UserController {
         return ResponseEntity.ok(userService.findById(id));
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @PutMapping("/{id}")
     @ApiOperation("Update a user by ID.")
     public ResponseEntity<UserModel> updateById(@PathVariable Long id, @RequestBody @Valid UserModel userModel){
         return ResponseEntity.ok(userService.updateById(id,userModel));
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @DeleteMapping("/{id}")
     @ApiOperation("Delete a user by ID.")
     public ResponseEntity<Void> deleteById(@PathVariable Long id){

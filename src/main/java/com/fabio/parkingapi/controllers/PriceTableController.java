@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -39,12 +40,14 @@ public class PriceTableController {
         return ResponseEntity.ok(priceTableService.findById(id));
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @PutMapping("/{id}")
     @ApiOperation(value = "Update a price.")
     public ResponseEntity<PriceTableDto> updateById(@PathVariable Long id, @RequestBody UpdatePriceTableDto dto){
         return ResponseEntity.ok(priceTableService.updateById(id,dto));
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @DeleteMapping("/{id}")
     @ApiOperation(value = "Delete a price.")
     public ResponseEntity<Void> deleteById(@PathVariable Long id){
