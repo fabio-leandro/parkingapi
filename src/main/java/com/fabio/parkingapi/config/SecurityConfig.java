@@ -1,6 +1,7 @@
 package com.fabio.parkingapi.config;
 
 import com.fabio.parkingapi.security.JWTAuthenticationFilter;
+import com.fabio.parkingapi.security.JWTAuthorizationFilter;
 import com.fabio.parkingapi.security.JWTUtil;
 import com.fabio.parkingapi.security.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +64,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET,"/api/"+version+"/users").permitAll()
                 .anyRequest().authenticated();
         http.addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtUtil));
+        http.addFilter(new JWTAuthorizationFilter(authenticationManager(),jwtUtil,userDetailsService));
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
