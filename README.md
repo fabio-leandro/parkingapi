@@ -8,10 +8,12 @@ ModelMapper</p>
 
 <p>Serviços:</p>
 <p>CRUD e geração de conta a pagar no estacionamento;</p>
-<p>CRUD de usuários da API;</p>
 <p>CRUD de tabela de preços;</p>
+<p>Testes Unitários;</p>
+<p>CRUD de usuários da API;</p>
 <p>Envio de email usando o servidor do GMAIL;</p>
 <p>Authenticação com token JWT e Autorização.</p>
+
 
 <p>Referência: https://web.dio.me/</p>
 <p>Mentor: https://github.com/sandrogiacom</p>
