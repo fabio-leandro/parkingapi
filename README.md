@@ -3,8 +3,7 @@
 <p>O objetivo é criar uma api que faz a gestão de um estacionamento.</p>
 <p>Estratégia de aprendizado foi assimilar a essência do projeto proposto e desenvolver do zero a API com lógica própria. Dessa forma foi possível aplicar os conhecimentos adiquiridos no bootcamp e com terceiros.</p>
 <br>
-<p>Ferramentas: Java, Maven, SpringBoot, SpringData, SpringValidation, SpringSecurity, JWT, SrpingMail, Banco em memória H2, Banco de dados Postgres, Documentação com Swagger,
-ModelMapper</p>
+<p>Ferramentas: Java, Maven, SpringBoot, SpringData, SpringValidation, SpringSecurity, JWT, SrpingMail, Banco em memória H2, Banco de dados Postgres, Documentação com Swagger, ModelMapper, Heroku, Postman.</p>
 
 <p>Serviços:</p>
 <p>CRUD e geração de conta a pagar no estacionamento;</p>
@@ -14,7 +13,7 @@ ModelMapper</p>
 <p>Envio de email usando o servidor do GMAIL;</p>
 <p>Authenticação com token JWT e Autorização.</p>
 
-
+<p>Link Heroku: https://parking-api-dio.herokuapp.com/swagger-ui </P>
 <p>Referência: https://web.dio.me/</p>
 <p>Mentor: https://github.com/sandrogiacom</p>
 
