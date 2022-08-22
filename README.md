@@ -13,7 +13,7 @@
 <p>Envio de email usando o servidor do GMAIL;</p>
 <p>Authenticação com token JWT e Autorização.</p>
 
-<p>Link Heroku: https://parking-api-dio.herokuapp.com/swagger-ui </P>
+<p>Link Heroku: https://parking-api-dio.herokuapp.com/swagger-ui/ </P>
 <p>Referência: https://web.dio.me/</p>
 <p>Mentor: https://github.com/sandrogiacom</p>
 
