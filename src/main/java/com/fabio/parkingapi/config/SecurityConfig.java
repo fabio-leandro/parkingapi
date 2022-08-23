@@ -5,6 +5,7 @@ import com.fabio.parkingapi.security.JWTAuthorizationFilter;
 import com.fabio.parkingapi.security.JWTUtil;
 import com.fabio.parkingapi.security.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -34,8 +35,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private JWTUtil jwtUtil;
 
-    private static String version = "${api.version}";
-
     private static final String[] PUBLIC_MATCHERS = {
             "/h2-console/**",
     };
@@ -53,8 +52,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/*.png"
     };
 
-    private static String[] PUBLIC_MATCHERS_POST ={
-            "/api/"+version+"/auth"
+    private static final String[] PUBLIC_MATCHERS_POST = {
+            "/api/v1/auth"
     };
 
     @Override
@@ -64,8 +63,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers(PUBLIC_MATCHERS).permitAll()
                 .antMatchers(PUBLIC_MATCHERS_SWAGGER).permitAll()
-                .antMatchers(HttpMethod.GET,"/api/"+version+"/parkings").permitAll()
-                .antMatchers(HttpMethod.GET,"/api/"+version+"/users").permitAll()
+                .antMatchers(HttpMethod.POST,PUBLIC_MATCHERS_POST).permitAll()
                 .anyRequest().authenticated();
         http.addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtUtil));
         http.addFilter(new JWTAuthorizationFilter(authenticationManager(),jwtUtil,userDetailsService));

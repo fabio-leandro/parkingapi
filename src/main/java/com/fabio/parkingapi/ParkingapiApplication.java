@@ -1,5 +1,6 @@
 package com.fabio.parkingapi;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -14,7 +15,6 @@ public class ParkingapiApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-
 
 	}
 }

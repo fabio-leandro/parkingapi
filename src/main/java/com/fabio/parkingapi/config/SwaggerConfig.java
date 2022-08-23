@@ -13,6 +13,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 public class SwaggerConfig {
 
     //http://localhost:8080/swagger-ui/
+    //https://parking-api-dio.herokuapp.com/swagger-ui/
 
     @Bean
     public Docket getDocket(){
